@@ -30,7 +30,7 @@ void noteStateMiddleWere(
   if (action is AddNoteAction) {
     Save(store.state);
   }
-  if (action is LoadNotesAction) {
+  if (action is GetNotesAction) {
     await GetPrefs()
         .then((state) => {store.dispatch(LoadNotesAction(state.notes))});
   }

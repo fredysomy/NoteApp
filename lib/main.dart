@@ -10,6 +10,8 @@ import 'package:noteapp/redux/reducer.dart';
 import 'package:noteapp/middlewere/middlewere.dart';
 import 'package:noteapp/screens/add.dart';
 
+import 'package:noteapp/viewmodels/asd.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -27,7 +29,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData.dark(),
         home: StoreBuilder(
             onInit: (store) {
-              store.dispatch(LoadNotesAction);
+              store.dispatch(GetNotesAction());
             },
             builder: (BuildContext context, Store<AppState> store) =>
                 HomePage(store)),
@@ -38,23 +40,39 @@ class MyApp extends StatelessWidget {
 
 class HomePage extends StatelessWidget {
   final Store<AppState> store;
-
   HomePage(this.store);
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: const Text(
-        "Note App",
-        style: TextStyle(fontSize: 25),
-      )),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () => {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => AddScreen()))
-        },
-      ),
-    );
+    return StoreConnector<AppState, NoteViewModel>(
+        converter: (Store<AppState> store) => NoteViewModel.create(store),
+        builder: (BuildContext context, NoteViewModel viewModel) => Scaffold(
+              appBar: AppBar(
+                  title: const Text(
+                "Note App",
+                style: TextStyle(fontSize: 25),
+              )),
+              floatingActionButton: FloatingActionButton(
+                child: const Icon(Icons.add),
+                onPressed: () => {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AddScreen(viewModel)))
+                },
+              ),
+              body: Container(
+                  child: ListView(
+                children: viewModel.notes
+                    .map((Note item) => ListTile(
+                          title: Text(item.title),
+                          leading: IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () => print("dsd"),
+                          ),
+                        ))
+                    .toList(),
+              )),
+            ));
   }
 }

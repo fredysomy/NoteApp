@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:noteapp/viewmodels/asd.dart';
 
 class AddScreen extends StatefulWidget {
+  AddScreen(this.viewmodel);
+  final NoteViewModel viewmodel;
   @override
   _AddScreenState createState() => _AddScreenState();
 }
@@ -33,6 +36,7 @@ class _AddScreenState extends State<AddScreen> {
             Container(
               padding: const EdgeInsets.fromLTRB(10, 20, 20, 10),
               child: TextFormField(
+                  controller: titlec,
                   decoration: const InputDecoration(label: Text("Title"))),
             ),
             Container(
@@ -47,7 +51,8 @@ class _AddScreenState extends State<AddScreen> {
             Expanded(
               child: Container(
                 padding: const EdgeInsets.fromLTRB(10, 20, 20, 10),
-                child: const TextField(
+                child: TextFormField(
+                  controller: bodyc,
                   decoration: InputDecoration(label: Text("Body")),
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
@@ -57,7 +62,10 @@ class _AddScreenState extends State<AddScreen> {
             Container(
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
               child: ElevatedButton(
-                  onPressed: () => {print("Saved")},
+                  onPressed: () => {
+                        widget.viewmodel
+                            .onAddNoteAction(titlec.text, bodyc.text)
+                      },
                   child: const Text("Submit")),
             )
           ],
