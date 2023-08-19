@@ -8,8 +8,9 @@ import 'package:noteapp/models/models.dart';
 import 'package:noteapp/redux/actions.dart';
 import 'package:noteapp/redux/reducer.dart';
 import 'package:noteapp/middlewere/middlewere.dart';
-import 'package:noteapp/screens/add.dart';
 
+import 'package:noteapp/screens/add.dart';
+import 'package:noteapp/screens/listtile.dart';
 import 'package:noteapp/viewmodels/asd.dart';
 
 void main() {
@@ -47,32 +48,28 @@ class HomePage extends StatelessWidget {
     return StoreConnector<AppState, NoteViewModel>(
         converter: (Store<AppState> store) => NoteViewModel.create(store),
         builder: (BuildContext context, NoteViewModel viewModel) => Scaffold(
-              appBar: AppBar(
-                  title: const Text(
-                "Note App",
-                style: TextStyle(fontSize: 25),
-              )),
-              floatingActionButton: FloatingActionButton(
-                child: const Icon(Icons.add),
-                onPressed: () => {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AddScreen(viewModel)))
-                },
-              ),
-              body: Container(
+            appBar: AppBar(
+                title: Text(
+              "Note App",
+              style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 25)),
+            )),
+            floatingActionButton: FloatingActionButton(
+              child: const Icon(Icons.add),
+              onPressed: () => {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AddScreen(viewModel)))
+              },
+            ),
+            body: Container(
+              child: Container(
                   child: ListView(
                 children: viewModel.notes
-                    .map((Note item) => ListTile(
-                          title: Text(item.title),
-                          leading: IconButton(
-                            icon: Icon(Icons.delete),
-                            onPressed: () => print("dsd"),
-                          ),
-                        ))
+                    .map((Note item) => ListWidget(viewModel, item.id,
+                        item.title, item.date, item.updated, item.body))
                     .toList(),
               )),
-            ));
+            )));
   }
 }

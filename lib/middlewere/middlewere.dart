@@ -27,7 +27,9 @@ Future<AppState> GetPrefs() async {
 void noteStateMiddleWere(
     Store<AppState> store, action, NextDispatcher next) async {
   next(action);
-  if (action is AddNoteAction) {
+  if (action is AddNoteAction ||
+      action is UpdateNotesAction ||
+      action is RemoveNoteAction) {
     Save(store.state);
   }
   if (action is GetNotesAction) {
